@@ -1,0 +1,22 @@
+#!/bin/sh
+
+hooktype=$(basename $0)
+verbose=$(git config hookrunner.verbose)
+
+test -z "$GIT_DIR" && GIT_DIR=$(git rev-parse --git-dir)
+
+if [ -z "$GIT_DIR" ]; then
+  echo "Can't determine the git dir. Are you sure this is a git repo?"
+  exit 111
+fi
+
+hookdir=$GIT_DIR/hooks/$hooktype.d
+test -n "$(find $hookdir -type d -empty)" && exit 0
+
+for HOOK in $GIT_DIR/hooks/$hooktype.d/*; do
+  test -x $HOOK || continue
+  if [ "$verbose" = "true" ]; then
+    echo $HOOK > /dev/stderr
+  fi
+  $HOOK $* || exit 111
+done
