@@ -9,6 +9,7 @@ fi
 install_haken() {
   git clone git://github.com/drench/git-haken.git ~/.git-haken
   git config --global init.templatedir ~/.git-haken/templates
+  rsync -a --delete ~/.git-haken/templates/hooks ~/.git-haken/.git/
 }
 
 exit_unless_haken_installed() {
