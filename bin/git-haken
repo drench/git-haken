@@ -1,0 +1,76 @@
+#!/bin/sh
+
+local_templatedir=~/.git-haken/templates
+templatedir=$(git config --global init.templatedir)
+if [ -n "$templatedir" ]; then
+  haken_dir=$(cd $templatedir && git rev-parse --show-toplevel)
+fi
+
+install_haken() {
+  git clone git://github.com/drench/git-haken.git ~/.git-haken
+  git config --global init.templatedir ~/.git-haken/templates
+}
+
+exit_unless_haken_installed() {
+  if [ -z "$templatedir" ]; then
+    echo "You don't appear to be using the git-haken template."
+    echo "Run 'git haken install' if you would like to."
+    exit 1
+  fi
+}
+
+haken_dir_status() {
+  exit_unless_haken_installed
+  git --git-dir $haken_dir/.git --work-tree $haken_dir status --porcelain
+}
+
+uninstall_haken() {
+  git config --global --unset init.templatedir
+  echo "You are no longer configured to use the git-haken template."
+  echo "If you wish to delete the template files, run: 'rm -rf $haken_dir'"
+  status=$(haken_dir_status)
+  if [ -n "$status" ]; then
+    echo "Warning: $haken_dir may have uncommitted files. Take a look before removing."
+  fi
+}
+
+update_haken() {
+  cd $haken_dir && git pull
+}
+
+haken_status() {
+  exit_unless_haken_installed
+
+  if [ $templatedir -ef $local_templatedir ]; then
+    if [ -d $templatedir ]; then
+      echo "You are configured to use the git haken template."
+      echo "To make sure your installation is up to date, run 'git haken update'"
+      exit 0
+    fi
+  else
+    echo "You appear to be using a custom template: $templatedir"
+    echo "If you would like to use git-haken's template instead,"
+    echo "run 'git haken install'."
+    exit 111
+  fi
+}
+
+case $1 in
+  install)
+    install_haken
+    ;;
+
+  uninstall)
+    exit_unless_haken_installed
+    uninstall_haken
+    ;;
+
+  update)
+    exit_unless_haken_installed
+    update_haken
+    ;;
+
+  *)
+    haken_status
+    ;;
+esac
