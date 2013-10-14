@@ -2,7 +2,15 @@
 
 For those of us who like git hooks, but not managing them.
 
-## To install:
+## Installation
+
+If you are a homebrew user on OS X, this is available on a 'tap':
+
+    brew tap drench/moregit
+    brew install git-haken
+    git haken install
+
+You can also set it up manually:
 
     git clone git://github.com/drench/git-haken.git ~/.git-haken
     git config --global init.templatedir ~/.git-haken/templates
