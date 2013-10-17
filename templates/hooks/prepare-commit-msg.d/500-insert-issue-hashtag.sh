@@ -6,7 +6,7 @@
 # If $2 contains something (such as "message" or "merge") then don't bother:
 test -n "$2" && exit 0
 
-ticket=$(git symbolic-ref HEAD | ruby -pe'$_ = $_.split(%r{/})[-1].chomp.split(%r{-}).grep(/^\d+$/).map { |n| "[#{n}]" }.join(" ")')
+ticket=$(git symbolic-ref HEAD | ruby -pe'$_ = $_.split(%r{/})[-1].chomp.split(%r{-}).grep(/^\d+$/).map { |n| "[\##{n}]" }.join(" ")')
 
 test -z "$ticket" && exit 0 # no ticket number found
 
