@@ -21,23 +21,24 @@ alternate template and the hooks it contains.
 ## To upgrade a tree you've already checked out:
 
     cd some/boring/old/repo
+    rm -rf .git/hooks
     git init
 
-## Haken comes with a few hooks that I've found useful:
+## Haken comes with a few hooks that I endorse and use:
 
-* One prevents you from committing trailing whitespace
-* One restarts pow on checkout, if this is a Rails project using pow
-* One handles local `user.name` and `user.email` configuration overrides
+* To prevent you from committing trailing whitespace
+* To restart pow on checkout, if this is a Rails project using pow
+* To handle local `user.name` and `user.email` configuration overrides
 (read `.git_template/hooks/post-checkout.d/100-local-config-overrides-on-clone.rb`
 for a better description of what this does)
-* One inserts a ticket number into your commit message template if your branch
+* To insert a ticket number into your commit message template if your branch
 name looks like it contains a ticket number
 
 These hooks live under `.git_template/hooks` in 17 subdirectories, one for
 each hook type: post-checkout hooks live under `.git_template/hooks/post-checkout.d/`,
 pre-commit hooks go in `.git_template/hooks/pre-commit.d/`, etc.
 
-Unlike standard git hooks, where there is just one script per hook type,
+Unlike standard git hooks, where you are limited to one script per hook type,
 you can have as many scripts as you like for each type. If you want 15
 pre-commit hooks, it's kind of excessive, but I won't stop you.
 
