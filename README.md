@@ -27,6 +27,7 @@ alternate template and the hooks it contains.
 ## Haken comes with a few hooks that I endorse and use:
 
 * To prevent you from committing trailing whitespace
+* To prevent you from committing text files without an ending newline
 * To restart pow on checkout, if this is a Rails project using pow
 * To handle local `user.name` and `user.email` configuration overrides
 (read `.git_template/hooks/post-checkout.d/100-local-config-overrides-on-clone.rb`
