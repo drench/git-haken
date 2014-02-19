@@ -36,6 +36,7 @@ end
 rc = 0
 
 changed_text_files.each do |filename|
+  next unless File.exist?(filename)
   next if File.has_newline_at_eof?(filename)
   rc = 111
   print "#{filename}: no newline at end of file\n"
