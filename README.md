@@ -27,7 +27,7 @@ alternate template and the hooks it contains.
 ## Haken comes with a few hooks that I endorse and use:
 
 * To prevent you from committing [trailing whitespace or merge conflict markers](templates/hooks/pre-commit.d/400-whitespace-check.sh)
-* To prevent you from committing [text files without an ending newline](templates/hooks/pre-commit.d/500-eof-newline-check.rb)
+* To prevent you from committing [text files without an ending newline](templates/hooks/pre-commit.d/500-eof-newline-check.sh)
 * To [restart pow on checkout](templates/hooks/post-checkout.d/500-restart-pow.sh), if this is a Rails project using [pow](http://pow.cx/)
 * To handle local `user.name` and `user.email` configuration overrides (please read [the hook source](templates/hooks/post-checkout.d/100-local-config-overrides-on-clone.rb) for a better description of what this does)
 * To insert a
