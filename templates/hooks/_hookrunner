@@ -24,7 +24,7 @@ notify() {
   esac
 
   if [ "$verbose" = "true" ]; then
-    echo >&2 "${colorcode}${message}${nocolor}"
+    printf >&2 "${colorcode}${message}${nocolor}\n"
   fi
 }
 
