@@ -28,15 +28,23 @@ notify() {
   fi
 }
 
+die() {
+  message=$1
+  notify "$message" red
+  exit 111
+}
+
 test -z "$GIT_DIR" && GIT_DIR=$(git rev-parse --git-dir)
 
 if [ -z "$GIT_DIR" ]; then
-  echo "Can't determine the git dir. Are you sure this is a git repo?"
-  exit 111
+  die "Can't determine the git dir. Are you sure this is a git repo?"
 fi
 
 hookdir=$GIT_DIR/hooks/$hooktype.d
-test -n "$(find $hookdir -type d -empty)" && exit 0
+if [ -n "$(find $hookdir -type d -empty)" ]; then
+  notify "There are no $hooktype hooks." cyan
+  exit 0
+fi
 
 for HOOK in $GIT_DIR/hooks/$hooktype.d/*; do
   if [ -x $HOOK ]; then
