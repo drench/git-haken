@@ -14,9 +14,9 @@ hookdir=$GIT_DIR/hooks/$hooktype.d
 test -n "$(find $hookdir -type d -empty)" && exit 0
 
 for HOOK in $GIT_DIR/hooks/$hooktype.d/*; do
-  test -x $HOOK || continue
   if [ "$verbose" = "true" ]; then
-    echo $HOOK > /dev/stderr
+    echo >&2 $HOOK
   fi
+  test -x $HOOK || continue
   $HOOK $* || exit 111
 done
