@@ -3,6 +3,31 @@
 hooktype=$(basename $0)
 verbose=$(git config hookrunner.verbose)
 
+notify() {
+  message=$1
+  color=$2
+  nocolor='\033[0m'
+
+  case "$color" in
+  cyan)
+    colorcode='\033[0;36m'
+    ;;
+  green)
+    colorcode='\033[0;32m'
+    ;;
+  red)
+    colorcode='\033[0;31m'
+    ;;
+  *)
+    colorcode=$nocolor
+    ;;
+  esac
+
+  if [ "$verbose" = "true" ]; then
+    echo >&2 "${colorcode}${message}${nocolor}"
+  fi
+}
+
 test -z "$GIT_DIR" && GIT_DIR=$(git rev-parse --git-dir)
 
 if [ -z "$GIT_DIR" ]; then
@@ -14,9 +39,15 @@ hookdir=$GIT_DIR/hooks/$hooktype.d
 test -n "$(find $hookdir -type d -empty)" && exit 0
 
 for HOOK in $GIT_DIR/hooks/$hooktype.d/*; do
-  if [ "$verbose" = "true" ]; then
-    echo >&2 $HOOK
+  if [ -x $HOOK ]; then
+    $HOOK $*
+    if [ "$?" -eq 0 ]; then
+      notify "$HOOK succeeded" green
+    else
+      notify "$HOOK failed with code $?" red
+      exit 111
+    fi
+  else
+    notify "$HOOK skipped (not executable)" cyan
   fi
-  test -x $HOOK || continue
-  $HOOK $* || exit 111
 done
